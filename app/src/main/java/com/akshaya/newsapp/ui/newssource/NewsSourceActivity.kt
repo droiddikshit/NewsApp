@@ -3,22 +3,20 @@ package com.akshaya.newsapp.ui.newssource
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.akshaya.newsapp.NewsApplication
 import com.akshaya.newsapp.data.model.NewsSources
 import com.akshaya.newsapp.databinding.ActivityNewsSourceBinding
-import com.akshaya.newsapp.di.component.DaggerActivityComponent
-import com.akshaya.newsapp.di.module.ActivityModule
+import com.akshaya.newsapp.di.component.ActivityComponent
+import com.akshaya.newsapp.ui.base.BaseActivity
 import com.akshaya.newsapp.utils.Status
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class NewsSourceActivity: AppCompatActivity() {
+class NewsSourceActivity: BaseActivity() {
 
     @Inject
     lateinit var newsSourceViewModel: NewsSourceViewModel
@@ -29,7 +27,6 @@ class NewsSourceActivity: AppCompatActivity() {
     private lateinit var binding: ActivityNewsSourceBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        injectDependencies()
         super.onCreate(savedInstanceState)
         binding = ActivityNewsSourceBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -80,12 +77,7 @@ class NewsSourceActivity: AppCompatActivity() {
         adapter.notifyDataSetChanged()
     }
 
-    private fun injectDependencies() {
-        DaggerActivityComponent
-            .builder()
-            .applicationComponent((application as NewsApplication).applicationComponent)
-            .activityModule(ActivityModule(this))
-            .build()
-            .inject(this)
+    override fun injectDependencies(activityComponent: ActivityComponent) {
+       activityComponent.inject(this)
     }
 }

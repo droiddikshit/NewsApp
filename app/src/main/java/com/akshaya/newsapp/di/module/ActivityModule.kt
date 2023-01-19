@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.akshaya.newsapp.data.repository.TopHeadlineRepository
 import com.akshaya.newsapp.di.ActivityContext
 import com.akshaya.newsapp.ui.base.ViewModelProviderFactory
+import com.akshaya.newsapp.ui.homescreen.HomeScreenViewModel
 import com.akshaya.newsapp.ui.newssource.NewsSourceAdapter
 import com.akshaya.newsapp.ui.newssource.NewsSourceViewModel
 import com.akshaya.newsapp.ui.topheadlines.TopHeadlineAdapter
@@ -36,6 +37,14 @@ class ActivityModule(private val activity: AppCompatActivity) {
             ViewModelProviderFactory(NewsSourceViewModel::class) {
                 NewsSourceViewModel(topHeadlineRepository)
             })[NewsSourceViewModel::class.java]
+    }
+
+  @Provides
+    fun provideHomeViewModel(topHeadlineRepository: TopHeadlineRepository): HomeScreenViewModel {
+        return ViewModelProvider(activity,
+            ViewModelProviderFactory(HomeScreenViewModel::class) {
+                HomeScreenViewModel(topHeadlineRepository)
+            })[HomeScreenViewModel::class.java]
     }
 
     @Provides

@@ -4,13 +4,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.akshaya.newsapp.data.model.NewsSources
 import com.akshaya.newsapp.data.repository.TopHeadlineRepository
+import com.akshaya.newsapp.ui.base.BaseViewModel
 import com.akshaya.newsapp.utils.Resource
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
-class NewsSourceViewModel (private val topHeadlineRepository: TopHeadlineRepository) : ViewModel() {
+class NewsSourceViewModel(private val topHeadlineRepository: TopHeadlineRepository) :
+    BaseViewModel() {
 
     private val _articleList = MutableStateFlow<Resource<NewsSources>>(Resource.loading())
 
