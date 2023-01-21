@@ -43,6 +43,10 @@ class NewsSourceActivity: BaseActivity() {
             )
         )
         recyclerView.adapter = adapter
+        adapter.itemClickListener={
+            Toast.makeText(applicationContext,"data"+it.name,Toast.LENGTH_LONG).show()
+
+        }
     }
 
     private fun setupObserver() {
