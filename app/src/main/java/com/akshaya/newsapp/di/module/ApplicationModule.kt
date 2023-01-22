@@ -1,6 +1,7 @@
 package com.akshaya.newsapp.di.module
 
 import android.content.Context
+import com.akshaya.newsapp.BuildConfig
 import com.akshaya.newsapp.NewsApplication
 import com.akshaya.newsapp.data.api.NetworkService
 import com.akshaya.newsapp.di.ApplicationContext
@@ -22,7 +23,7 @@ class ApplicationModule(private val application: NewsApplication) {
 
     @BaseUrl
     @Provides
-    fun provideBaseUrl(): String = "https://newsapi.org/v2/"
+    fun provideBaseUrl(): String = BuildConfig.BASE_URL
 
     @Provides
     @Singleton
