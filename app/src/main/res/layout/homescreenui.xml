@@ -12,7 +12,7 @@
         android:layout_margin="24dp"
         android:layout_marginTop="18dp"
         android:padding="16dp"
-        android:text="Top Headlines" />
+        android:text="@string/top_headlines" />
 
     <Button
         android:id="@+id/news_source"
@@ -22,7 +22,7 @@
         android:layout_margin="24dp"
         android:layout_marginTop="18dp"
         android:padding="16dp"
-        android:text="News Socurce" />
+        android:text="@string/news_socurce" />
 
     <Button
         android:id="@+id/coroutines"
@@ -32,7 +32,7 @@
         android:layout_margin="24dp"
         android:layout_marginTop="18dp"
         android:padding="16dp"
-        android:text="Coroutines" />
+        android:text="@string/countries" />
 
     <Button
         android:id="@+id/languages"
@@ -42,7 +42,7 @@
         android:layout_margin="24dp"
         android:layout_marginTop="18dp"
         android:padding="16dp"
-        android:text="Languages" />
+        android:text="@string/languages" />
 
 
     <Button
@@ -53,7 +53,7 @@
         android:layout_margin="24dp"
         android:layout_marginTop="18dp"
         android:padding="16dp"
-        android:text="Search" />
+        android:text="@string/search" />
 
 
 </LinearLayout>

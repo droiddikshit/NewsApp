@@ -22,4 +22,5 @@ interface ApplicationComponent {
 
     fun getTopHeadlineRepository(): TopHeadlineRepository
 
+
 }

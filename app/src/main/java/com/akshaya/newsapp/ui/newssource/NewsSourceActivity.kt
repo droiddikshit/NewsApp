@@ -1,5 +1,6 @@
-package com.akshaya.newsapp.ui.topheadlines
+package com.akshaya.newsapp.ui.newssource
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -8,27 +9,29 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.akshaya.newsapp.data.model.Article
-import com.akshaya.newsapp.databinding.ActivityTopHeadlineBinding
+import com.akshaya.newsapp.data.model.NewsSources
+import com.akshaya.newsapp.databinding.ActivityNewsSourceBinding
 import com.akshaya.newsapp.di.component.ActivityComponent
 import com.akshaya.newsapp.ui.base.BaseActivity
+import com.akshaya.newsapp.ui.newssource.sourcedetails.NewsSourceDetailsActivity
+import com.akshaya.newsapp.utils.AppConstants.NEWS_SRC_KEY
 import com.akshaya.newsapp.utils.Status
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class TopHeadlineActivity: BaseActivity() {
+class NewsSourceActivity : BaseActivity() {
 
     @Inject
-    lateinit var newsListViewModel: TopHeadlineViewModel
+    lateinit var newsSourceViewModel: NewsSourceViewModel
 
     @Inject
-    lateinit var adapter: TopHeadlineAdapter
+    lateinit var adapter: NewsSourceAdapter
 
-    private lateinit var binding: ActivityTopHeadlineBinding
+    private lateinit var binding: ActivityNewsSourceBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityTopHeadlineBinding.inflate(layoutInflater)
+        binding = ActivityNewsSourceBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupUI()
         setupObserver()
@@ -44,12 +47,19 @@ class TopHeadlineActivity: BaseActivity() {
             )
         )
         recyclerView.adapter = adapter
+        adapter.itemClickListener = {
+            startActivity(
+                Intent(this, NewsSourceDetailsActivity::class.java).putExtra(
+                    NEWS_SRC_KEY,
+                    it.name
+                )
+            )
+        }
     }
 
     private fun setupObserver() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                newsListViewModel.articleList.collect {
+        lifecycleScope.launchWhenStarted {
+                newsSourceViewModel.articleList.collect {
                     when (it.status) {
                         Status.SUCCESS -> {
                             binding.progressBar.visibility = View.GONE
@@ -63,23 +73,22 @@ class TopHeadlineActivity: BaseActivity() {
                         Status.ERROR -> {
                             //Handle Error
                             binding.progressBar.visibility = View.GONE
-                            Toast.makeText(this@TopHeadlineActivity, it.message, Toast.LENGTH_LONG)
+                            Toast.makeText(this@NewsSourceActivity, it.message, Toast.LENGTH_LONG)
                                 .show()
                         }
                     }
+
                 }
-            }
+
         }
     }
 
-    private fun renderList(articleList: List<Article>) {
-        adapter.addData(articleList)
+    private fun renderList(articleList: NewsSources) {
+        adapter.addData(articleList.source)
         adapter.notifyDataSetChanged()
     }
-
 
     override fun injectDependencies(activityComponent: ActivityComponent) {
         activityComponent.inject(this)
     }
-
 }
