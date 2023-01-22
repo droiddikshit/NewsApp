@@ -2,6 +2,7 @@ package com.akshaya.newsapp.ui.newssource
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.akshaya.newsapp.data.model.Article
 import com.akshaya.newsapp.data.model.NewsSources
 import com.akshaya.newsapp.data.repository.TopHeadlineRepository
 import com.akshaya.newsapp.ui.base.BaseViewModel
@@ -17,6 +18,7 @@ class NewsSourceViewModel(private val topHeadlineRepository: TopHeadlineReposito
     private val _articleList = MutableStateFlow<Resource<NewsSources>>(Resource.loading())
 
     val articleList: StateFlow<Resource<NewsSources>> = _articleList
+
 
     init {
         fetchNews()

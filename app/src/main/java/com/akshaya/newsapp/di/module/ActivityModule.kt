@@ -9,6 +9,8 @@ import com.akshaya.newsapp.ui.base.ViewModelProviderFactory
 import com.akshaya.newsapp.ui.homescreen.HomeScreenViewModel
 import com.akshaya.newsapp.ui.newssource.NewsSourceAdapter
 import com.akshaya.newsapp.ui.newssource.NewsSourceViewModel
+import com.akshaya.newsapp.ui.newssource.sourcedetails.NewsSourceDetailsAdapter
+import com.akshaya.newsapp.ui.newssource.sourcedetails.NewsSourceDetailsViewModel
 import com.akshaya.newsapp.ui.topheadlines.TopHeadlineAdapter
 import com.akshaya.newsapp.ui.topheadlines.TopHeadlineViewModel
 import dagger.Module
@@ -48,11 +50,22 @@ class ActivityModule(private val activity: AppCompatActivity) {
     }
 
     @Provides
+    fun provideSrcDetailsViewModel(topHeadlineRepository: TopHeadlineRepository): NewsSourceDetailsViewModel {
+        return ViewModelProvider(activity,
+            ViewModelProviderFactory(NewsSourceDetailsViewModel::class) {
+                NewsSourceDetailsViewModel(topHeadlineRepository)
+            })[NewsSourceDetailsViewModel::class.java]
+    }
+
+    @Provides
     fun provideTopHeadlineAdapter() = TopHeadlineAdapter(ArrayList())
 
 
 
     @Provides
     fun provideNewsSourceAdapter() = NewsSourceAdapter(ArrayList())
+
+    @Provides
+    fun provideNewsSourceDetailsAdapter() = NewsSourceDetailsAdapter(ArrayList())
 
 }

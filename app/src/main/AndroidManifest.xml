@@ -25,6 +25,7 @@
         </activity>
         <activity android:name=".ui.topheadlines.TopHeadlineActivity"/>
         <activity android:name=".ui.newssource.NewsSourceActivity"/>
+        <activity android:name="com.akshaya.newsapp.ui.newssource.sourcedetails.NewsSourceDetailsActivity" />
     </application>
 
 </manifest>

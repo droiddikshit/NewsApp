@@ -1,6 +1,5 @@
-package com.akshaya.newsapp.ui.newssource
+package com.akshaya.newsapp.ui.newssource.sourcedetails
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -9,32 +8,34 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.akshaya.newsapp.data.model.NewsSources
+import com.akshaya.newsapp.data.model.Article
 import com.akshaya.newsapp.databinding.ActivityNewsSourceBinding
 import com.akshaya.newsapp.di.component.ActivityComponent
 import com.akshaya.newsapp.ui.base.BaseActivity
-import com.akshaya.newsapp.ui.newssource.sourcedetails.NewsSourceDetailsActivity
 import com.akshaya.newsapp.utils.AppConstants.NEWS_SRC_KEY
 import com.akshaya.newsapp.utils.Status
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class NewsSourceActivity : BaseActivity() {
+class NewsSourceDetailsActivity : BaseActivity() {
 
     @Inject
-    lateinit var newsSourceViewModel: NewsSourceViewModel
+    lateinit var newsSourceViewModel: NewsSourceDetailsViewModel
 
     @Inject
-    lateinit var adapter: NewsSourceAdapter
+    lateinit var adapter: NewsSourceDetailsAdapter
 
     private lateinit var binding: ActivityNewsSourceBinding
+    private var newsSourceId = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityNewsSourceBinding.inflate(layoutInflater)
+        newsSourceId = getIntent().getStringExtra(NEWS_SRC_KEY).toString()
         setContentView(binding.root)
         setupUI()
         setupObserver()
+        newsSourceViewModel.fetchSourceNews(newsSourceId)
     }
 
     private fun setupUI() {
@@ -47,19 +48,11 @@ class NewsSourceActivity : BaseActivity() {
             )
         )
         recyclerView.adapter = adapter
-        adapter.itemClickListener = {
-            startActivity(
-                Intent(this, NewsSourceDetailsActivity::class.java).putExtra(
-                    NEWS_SRC_KEY,
-                    it.name
-                )
-            )
-        }
     }
 
     private fun setupObserver() {
         lifecycleScope.launchWhenStarted {
-                newsSourceViewModel.articleList.collect {
+                newsSourceViewModel.sourceDetailsList.collect {
                     when (it.status) {
                         Status.SUCCESS -> {
                             binding.progressBar.visibility = View.GONE
@@ -73,7 +66,11 @@ class NewsSourceActivity : BaseActivity() {
                         Status.ERROR -> {
                             //Handle Error
                             binding.progressBar.visibility = View.GONE
-                            Toast.makeText(this@NewsSourceActivity, it.message, Toast.LENGTH_LONG)
+                            Toast.makeText(
+                                this@NewsSourceDetailsActivity,
+                                it.message,
+                                Toast.LENGTH_LONG
+                            )
                                 .show()
                         }
                     }
@@ -81,10 +78,11 @@ class NewsSourceActivity : BaseActivity() {
                 }
 
         }
+
     }
 
-    private fun renderList(articleList: NewsSources) {
-        adapter.addData(articleList.source)
+    private fun renderList(articleList: List<Article>) {
+        adapter.addData(articleList)
         adapter.notifyDataSetChanged()
     }
 
