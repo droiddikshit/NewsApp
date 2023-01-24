@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.akshaya.newsapp.data.repository.TopHeadlineRepository
 import com.akshaya.newsapp.di.ActivityContext
 import com.akshaya.newsapp.ui.base.ViewModelProviderFactory
+import com.akshaya.newsapp.ui.countries.CountrySelectionAdapter
+import com.akshaya.newsapp.ui.countries.CountrySelectionViewModel
 import com.akshaya.newsapp.ui.homescreen.HomeScreenViewModel
 import com.akshaya.newsapp.ui.newssource.NewsSourceAdapter
 import com.akshaya.newsapp.ui.newssource.NewsSourceViewModel
@@ -41,7 +43,7 @@ class ActivityModule(private val activity: AppCompatActivity) {
             })[NewsSourceViewModel::class.java]
     }
 
-  @Provides
+    @Provides
     fun provideHomeViewModel(topHeadlineRepository: TopHeadlineRepository): HomeScreenViewModel {
         return ViewModelProvider(activity,
             ViewModelProviderFactory(HomeScreenViewModel::class) {
@@ -58,14 +60,23 @@ class ActivityModule(private val activity: AppCompatActivity) {
     }
 
     @Provides
+    fun provideLanguageSelectionViewModel(topHeadlineRepository: TopHeadlineRepository): CountrySelectionViewModel {
+        return ViewModelProvider(activity,
+            ViewModelProviderFactory(CountrySelectionViewModel::class) {
+                CountrySelectionViewModel(topHeadlineRepository)
+            })[CountrySelectionViewModel::class.java]
+    }
+
+    @Provides
     fun provideTopHeadlineAdapter() = TopHeadlineAdapter(ArrayList())
-
-
 
     @Provides
     fun provideNewsSourceAdapter() = NewsSourceAdapter(ArrayList())
 
     @Provides
     fun provideNewsSourceDetailsAdapter() = NewsSourceDetailsAdapter(ArrayList())
+
+    @Provides
+    fun provideCountrySelectionAdapter() = CountrySelectionAdapter(ArrayList())
 
 }
