@@ -12,7 +12,7 @@ import org.json.JSONObject
 import javax.inject.Inject
 
 
-class CountriesSelectionActivity : BaseActivity() {
+class CountriesSelectionActivity : BaseActivity(), CountrySelectionAdapter.CountrySelectionListner {
 
     @Inject
     lateinit var viewModel: CountrySelectionViewModel
@@ -33,7 +33,7 @@ class CountriesSelectionActivity : BaseActivity() {
         try {
             val obj = JSONObject(loadJSONFromAssets(this))
             val status: String = obj.getString("status")
-            if (status == "Success") {
+            if (status == "success") {
                 val contactArray: JSONArray = obj.getJSONArray("data")
                 val countryList: ArrayList<HashMap<String?, String?>> = ArrayList()
                 var countryData: HashMap<String?, String?>
@@ -44,7 +44,7 @@ class CountriesSelectionActivity : BaseActivity() {
                     countryData["name"] = name
                     countryList.add(countryData)
                 }
-                val contactAdapter = CountrySelectionAdapter(countryList)
+                val contactAdapter = CountrySelectionAdapter(countryList,this)
                 binding.recyclerView.setLayoutManager(LinearLayoutManager(this))
                 binding.recyclerView.setAdapter(contactAdapter)
                 binding.progressBar.visibility = View.GONE
@@ -56,5 +56,9 @@ class CountriesSelectionActivity : BaseActivity() {
 
     override fun injectDependencies(activityComponent: ActivityComponent) {
         activityComponent.inject(this)
+    }
+
+    override fun onCountrySelectionListner(data: String) {
+
     }
 }

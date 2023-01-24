@@ -7,13 +7,17 @@ import com.akshaya.newsapp.databinding.ActivityNewsSourceItemBinding
 import com.akshaya.newsapp.databinding.LanguageSelectionItemBinding
 
 class CountrySelectionAdapter(
-    private val languageData: ArrayList<HashMap<String?, String?>>
+    private val languageData: ArrayList<HashMap<String?, String?>>,
+    private val countrySelectionListner: CountrySelectionListner?
 ) : RecyclerView.Adapter<CountrySelectionAdapter.DataViewHolder>() {
 
     class DataViewHolder(private val binding: LanguageSelectionItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(holder: ArrayList<HashMap<String?, String?>>) {
+        fun bind(holder: ArrayList<HashMap<String?, String?>>,countrySelectionListner: CountrySelectionListner?) {
             binding.languageNames.text = holder.get(position).get("name")
+            binding.layoutCounrtyCode.setOnClickListener{
+            countrySelectionListner?.onCountrySelectionListner(holder.get(position).get("name").toString())
+            }
         }
     }
 
@@ -29,5 +33,9 @@ class CountrySelectionAdapter(
     override fun getItemCount(): Int = languageData.size
 
     override fun onBindViewHolder(holder: DataViewHolder, position: Int) =
-        holder.bind(languageData)
+        holder.bind(languageData,countrySelectionListner)
+
+    interface CountrySelectionListner {
+        fun onCountrySelectionListner(data: String)
+    }
 }

@@ -77,6 +77,6 @@ class ActivityModule(private val activity: AppCompatActivity) {
     fun provideNewsSourceDetailsAdapter() = NewsSourceDetailsAdapter(ArrayList())
 
     @Provides
-    fun provideCountrySelectionAdapter() = CountrySelectionAdapter(ArrayList())
+    fun provideCountrySelectionAdapter() = CountrySelectionAdapter(ArrayList(), countrySelectionListner = null)
 
 }
