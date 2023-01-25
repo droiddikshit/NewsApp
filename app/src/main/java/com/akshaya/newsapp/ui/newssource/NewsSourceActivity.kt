@@ -19,10 +19,7 @@ import com.akshaya.newsapp.utils.Status
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class NewsSourceActivity : BaseActivity() {
-
-    @Inject
-    lateinit var newsSourceViewModel: NewsSourceViewModel
+class NewsSourceActivity : BaseActivity<NewsSourceViewModel>() {
 
     @Inject
     lateinit var adapter: NewsSourceAdapter
@@ -59,7 +56,7 @@ class NewsSourceActivity : BaseActivity() {
 
     private fun setupObserver() {
         lifecycleScope.launchWhenStarted {
-                newsSourceViewModel.articleList.collect {
+                viewModel.articleList.collect {
                     when (it.status) {
                         Status.SUCCESS -> {
                             binding.progressBar.visibility = View.GONE

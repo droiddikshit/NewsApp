@@ -17,9 +17,7 @@ import com.akshaya.newsapp.utils.Status
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class CountryDetailsActivity : BaseActivity() {
-    @Inject
-    lateinit var viewModel: CountryDetailsViewModel
+class CountryDetailsActivity : BaseActivity<CountryDetailsViewModel>() {
 
     @Inject
     lateinit var adapter: CountryDetailsAdapter

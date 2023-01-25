@@ -14,7 +14,7 @@ import com.akshaya.newsapp.utils.AppConstants.NEWS_SRC_KEY
 import com.akshaya.newsapp.utils.Status
 import javax.inject.Inject
 
-class NewsSourceDetailsActivity : BaseActivity() {
+class NewsSourceDetailsActivity : BaseActivity<NewsSourceDetailsViewModel>() {
 
     @Inject
     lateinit var newsSourceViewModel: NewsSourceDetailsViewModel

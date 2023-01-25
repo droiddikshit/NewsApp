@@ -15,10 +15,7 @@ import org.json.JSONObject
 import javax.inject.Inject
 
 
-class CountriesSelectionActivity : BaseActivity(), CountrySelectionAdapter.CountrySelectionListner {
-
-    @Inject
-    lateinit var viewModel: CountrySelectionViewModel
+class CountriesSelectionActivity : BaseActivity<CountrySelectionViewModel>(), CountrySelectionAdapter.CountrySelectionListner {
 
     @Inject
     lateinit var adapter: CountrySelectionAdapter

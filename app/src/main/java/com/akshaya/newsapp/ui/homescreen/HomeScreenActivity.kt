@@ -9,7 +9,7 @@ import com.akshaya.newsapp.ui.countries.CountriesSelectionActivity
 import com.akshaya.newsapp.ui.newssource.NewsSourceActivity
 import com.akshaya.newsapp.ui.topheadlines.TopHeadlineActivity
 
-class HomeScreenActivity : BaseActivity() {
+class HomeScreenActivity : BaseActivity<HomeScreenViewModel>() {
 
     private lateinit var binding: HomescreenuiBinding
 
