@@ -8,6 +8,8 @@ import com.akshaya.newsapp.di.ActivityContext
 import com.akshaya.newsapp.ui.base.ViewModelProviderFactory
 import com.akshaya.newsapp.ui.countries.CountrySelectionAdapter
 import com.akshaya.newsapp.ui.countries.CountrySelectionViewModel
+import com.akshaya.newsapp.ui.countrydetails.CountryDetailsAdapter
+import com.akshaya.newsapp.ui.countrydetails.CountryDetailsViewModel
 import com.akshaya.newsapp.ui.homescreen.HomeScreenViewModel
 import com.akshaya.newsapp.ui.newssource.NewsSourceAdapter
 import com.akshaya.newsapp.ui.newssource.NewsSourceViewModel
@@ -68,6 +70,14 @@ class ActivityModule(private val activity: AppCompatActivity) {
     }
 
     @Provides
+    fun provideCountryDetailsViewModel(topHeadlineRepository: TopHeadlineRepository): CountryDetailsViewModel {
+        return ViewModelProvider(activity,
+            ViewModelProviderFactory(CountryDetailsViewModel::class) {
+                CountryDetailsViewModel(topHeadlineRepository)
+            })[CountryDetailsViewModel::class.java]
+    }
+
+    @Provides
     fun provideTopHeadlineAdapter() = TopHeadlineAdapter(ArrayList())
 
     @Provides
@@ -78,5 +88,8 @@ class ActivityModule(private val activity: AppCompatActivity) {
 
     @Provides
     fun provideCountrySelectionAdapter() = CountrySelectionAdapter(ArrayList(), countrySelectionListner = null)
+
+    @Provides
+    fun provideCountryDetailsAdapter() = CountryDetailsAdapter(ArrayList())
 
 }
