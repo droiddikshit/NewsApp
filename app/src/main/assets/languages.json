@@ -1,0 +1,14 @@
+{
+  "status": "success",
+  "data": [
+    {
+      "name": "English"
+    },
+    {
+      "name": "German"
+    },
+    {
+      "name": "Hindi"
+    }
+  ]
+}

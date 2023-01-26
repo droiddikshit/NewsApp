@@ -3,9 +3,7 @@ package com.akshaya.newsapp.ui.newssource.sourcedetails
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.akshaya.newsapp.data.model.Article
@@ -14,10 +12,9 @@ import com.akshaya.newsapp.di.component.ActivityComponent
 import com.akshaya.newsapp.ui.base.BaseActivity
 import com.akshaya.newsapp.utils.AppConstants.NEWS_SRC_KEY
 import com.akshaya.newsapp.utils.Status
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class NewsSourceDetailsActivity : BaseActivity() {
+class NewsSourceDetailsActivity : BaseActivity<NewsSourceDetailsViewModel>() {
 
     @Inject
     lateinit var newsSourceViewModel: NewsSourceDetailsViewModel
@@ -52,30 +49,30 @@ class NewsSourceDetailsActivity : BaseActivity() {
 
     private fun setupObserver() {
         lifecycleScope.launchWhenStarted {
-                newsSourceViewModel.sourceDetailsList.collect {
-                    when (it.status) {
-                        Status.SUCCESS -> {
-                            binding.progressBar.visibility = View.GONE
-                            it.data?.let { newsList -> renderList(newsList) }
-                            binding.recyclerView.visibility = View.VISIBLE
-                        }
-                        Status.LOADING -> {
-                            binding.progressBar.visibility = View.VISIBLE
-                            binding.recyclerView.visibility = View.GONE
-                        }
-                        Status.ERROR -> {
-                            //Handle Error
-                            binding.progressBar.visibility = View.GONE
-                            Toast.makeText(
-                                this@NewsSourceDetailsActivity,
-                                it.message,
-                                Toast.LENGTH_LONG
-                            )
-                                .show()
-                        }
+            newsSourceViewModel.sourceDetailsList.collect {
+                when (it.status) {
+                    Status.SUCCESS -> {
+                        binding.progressBar.visibility = View.GONE
+                        it.data?.let { newsList -> renderList(newsList) }
+                        binding.recyclerView.visibility = View.VISIBLE
                     }
-
+                    Status.LOADING -> {
+                        binding.progressBar.visibility = View.VISIBLE
+                        binding.recyclerView.visibility = View.GONE
+                    }
+                    Status.ERROR -> {
+                        //Handle Error
+                        binding.progressBar.visibility = View.GONE
+                        Toast.makeText(
+                            this@NewsSourceDetailsActivity,
+                            it.message,
+                            Toast.LENGTH_LONG
+                        )
+                            .show()
+                    }
                 }
+
+            }
 
         }
 

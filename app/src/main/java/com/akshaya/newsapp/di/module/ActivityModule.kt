@@ -5,7 +5,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.akshaya.newsapp.data.repository.TopHeadlineRepository
 import com.akshaya.newsapp.di.ActivityContext
+import com.akshaya.newsapp.ui.base.BaseActivity
 import com.akshaya.newsapp.ui.base.ViewModelProviderFactory
+import com.akshaya.newsapp.ui.countries.CountrySelectionAdapter
+import com.akshaya.newsapp.ui.countries.CountrySelectionViewModel
+import com.akshaya.newsapp.ui.countrydetails.CountryDetailsAdapter
+import com.akshaya.newsapp.ui.countrydetails.CountryDetailsViewModel
 import com.akshaya.newsapp.ui.homescreen.HomeScreenViewModel
 import com.akshaya.newsapp.ui.newssource.NewsSourceAdapter
 import com.akshaya.newsapp.ui.newssource.NewsSourceViewModel
@@ -17,7 +22,8 @@ import dagger.Module
 import dagger.Provides
 
 @Module
-class ActivityModule(private val activity: AppCompatActivity) {
+class ActivityModule(private val activity: BaseActivity<*>) {
+
 
     @ActivityContext
     @Provides
@@ -41,7 +47,7 @@ class ActivityModule(private val activity: AppCompatActivity) {
             })[NewsSourceViewModel::class.java]
     }
 
-  @Provides
+    @Provides
     fun provideHomeViewModel(topHeadlineRepository: TopHeadlineRepository): HomeScreenViewModel {
         return ViewModelProvider(activity,
             ViewModelProviderFactory(HomeScreenViewModel::class) {
@@ -58,14 +64,34 @@ class ActivityModule(private val activity: AppCompatActivity) {
     }
 
     @Provides
+    fun provideLanguageSelectionViewModel(topHeadlineRepository: TopHeadlineRepository): CountrySelectionViewModel {
+        return ViewModelProvider(activity,
+            ViewModelProviderFactory(CountrySelectionViewModel::class) {
+                CountrySelectionViewModel(topHeadlineRepository)
+            })[CountrySelectionViewModel::class.java]
+    }
+
+    @Provides
+    fun provideCountryDetailsViewModel(topHeadlineRepository: TopHeadlineRepository): CountryDetailsViewModel {
+        return ViewModelProvider(activity,
+            ViewModelProviderFactory(CountryDetailsViewModel::class) {
+                CountryDetailsViewModel(topHeadlineRepository)
+            })[CountryDetailsViewModel::class.java]
+    }
+
+    @Provides
     fun provideTopHeadlineAdapter() = TopHeadlineAdapter(ArrayList())
-
-
 
     @Provides
     fun provideNewsSourceAdapter() = NewsSourceAdapter(ArrayList())
 
     @Provides
     fun provideNewsSourceDetailsAdapter() = NewsSourceDetailsAdapter(ArrayList())
+
+    @Provides
+    fun provideCountrySelectionAdapter() = CountrySelectionAdapter(ArrayList(), countrySelectionListner = null)
+
+    @Provides
+    fun provideCountryDetailsAdapter() = CountryDetailsAdapter(ArrayList())
 
 }

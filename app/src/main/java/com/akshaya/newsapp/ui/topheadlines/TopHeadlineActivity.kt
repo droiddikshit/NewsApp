@@ -16,10 +16,7 @@ import com.akshaya.newsapp.utils.Status
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class TopHeadlineActivity: BaseActivity() {
-
-    @Inject
-    lateinit var newsListViewModel: TopHeadlineViewModel
+class TopHeadlineActivity: BaseActivity<TopHeadlineViewModel>() {
 
     @Inject
     lateinit var adapter: TopHeadlineAdapter
@@ -49,7 +46,7 @@ class TopHeadlineActivity: BaseActivity() {
     private fun setupObserver() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                newsListViewModel.articleList.collect {
+                viewModel.articleList.collect {
                     when (it.status) {
                         Status.SUCCESS -> {
                             binding.progressBar.visibility = View.GONE

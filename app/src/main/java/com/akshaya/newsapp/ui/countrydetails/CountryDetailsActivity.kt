@@ -1,6 +1,5 @@
-package com.akshaya.newsapp.ui.newssource
+package com.akshaya.newsapp.ui.countrydetails
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -9,29 +8,32 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.akshaya.newsapp.data.model.NewsSources
-import com.akshaya.newsapp.databinding.ActivityNewsSourceBinding
+import com.akshaya.newsapp.data.model.Article
+import com.akshaya.newsapp.databinding.CountryDetailsUiBinding
 import com.akshaya.newsapp.di.component.ActivityComponent
 import com.akshaya.newsapp.ui.base.BaseActivity
-import com.akshaya.newsapp.ui.newssource.sourcedetails.NewsSourceDetailsActivity
-import com.akshaya.newsapp.utils.AppConstants.NEWS_SRC_KEY
+import com.akshaya.newsapp.utils.AppConstants
 import com.akshaya.newsapp.utils.Status
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class NewsSourceActivity : BaseActivity<NewsSourceViewModel>() {
+class CountryDetailsActivity : BaseActivity<CountryDetailsViewModel>() {
 
     @Inject
-    lateinit var adapter: NewsSourceAdapter
+    lateinit var adapter: CountryDetailsAdapter
 
-    private lateinit var binding: ActivityNewsSourceBinding
+    private lateinit var binding: CountryDetailsUiBinding
+
+    private var languageCode = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityNewsSourceBinding.inflate(layoutInflater)
+        binding = CountryDetailsUiBinding.inflate(layoutInflater)
+        languageCode = getIntent().getStringExtra(AppConstants.LANGUAGE_CODE_KEY).toString()
         setContentView(binding.root)
         setupUI()
         setupObserver()
+        viewModel.fetchSourceNews(languageCode)
     }
 
     private fun setupUI() {
@@ -44,19 +46,12 @@ class NewsSourceActivity : BaseActivity<NewsSourceViewModel>() {
             )
         )
         recyclerView.adapter = adapter
-        adapter.itemClickListener = {
-            startActivity(
-                Intent(this, NewsSourceDetailsActivity::class.java).putExtra(
-                    NEWS_SRC_KEY,
-                    it.name
-                )
-            )
-        }
     }
 
     private fun setupObserver() {
-        lifecycleScope.launchWhenStarted {
-                viewModel.articleList.collect {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.languageDetailsList.collect {
                     when (it.status) {
                         Status.SUCCESS -> {
                             binding.progressBar.visibility = View.GONE
@@ -70,18 +65,21 @@ class NewsSourceActivity : BaseActivity<NewsSourceViewModel>() {
                         Status.ERROR -> {
                             //Handle Error
                             binding.progressBar.visibility = View.GONE
-                            Toast.makeText(this@NewsSourceActivity, it.message, Toast.LENGTH_LONG)
+                            Toast.makeText(
+                                this@CountryDetailsActivity,
+                                it.message,
+                                Toast.LENGTH_LONG
+                            )
                                 .show()
                         }
                     }
-
                 }
-
+            }
         }
     }
 
-    private fun renderList(articleList: NewsSources) {
-        adapter.addData(articleList.source)
+    private fun renderList(articleList: List<Article>) {
+        adapter.addData(articleList)
         adapter.notifyDataSetChanged()
     }
 

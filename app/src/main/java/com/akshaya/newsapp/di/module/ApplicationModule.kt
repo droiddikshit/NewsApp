@@ -1,13 +1,14 @@
 package com.akshaya.newsapp.di.module
 
 import android.content.Context
+import com.akshaya.newsapp.BuildConfig
 import com.akshaya.newsapp.NewsApplication
 import com.akshaya.newsapp.data.api.NetworkService
+import com.akshaya.newsapp.data.remote.Networking
 import com.akshaya.newsapp.di.ApplicationContext
 import com.akshaya.newsapp.di.BaseUrl
 import dagger.Module
 import dagger.Provides
-import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
@@ -22,7 +23,7 @@ class ApplicationModule(private val application: NewsApplication) {
 
     @BaseUrl
     @Provides
-    fun provideBaseUrl(): String = "https://newsapi.org/v2/"
+    fun provideBaseUrl(): String = BuildConfig.BASE_URL
 
     @Provides
     @Singleton
@@ -31,14 +32,7 @@ class ApplicationModule(private val application: NewsApplication) {
     @Provides
     @Singleton
     fun provideNetworkService(
-        @BaseUrl baseUrl: String,
-        gsonConverterFactory: GsonConverterFactory
-    ): NetworkService {
-        return Retrofit.Builder()
-            .baseUrl(baseUrl)
-            .addConverterFactory(gsonConverterFactory)
-            .build()
-            .create(NetworkService::class.java)
-    }
-
+    ): NetworkService = Networking.createNetworkingConfig(
+        BuildConfig.BASE_URL,
+    )
 }
