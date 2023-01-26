@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.akshaya.newsapp.data.repository.TopHeadlineRepository
 import com.akshaya.newsapp.di.ActivityContext
+import com.akshaya.newsapp.ui.base.BaseActivity
 import com.akshaya.newsapp.ui.base.ViewModelProviderFactory
 import com.akshaya.newsapp.ui.countries.CountrySelectionAdapter
 import com.akshaya.newsapp.ui.countries.CountrySelectionViewModel
@@ -21,7 +22,8 @@ import dagger.Module
 import dagger.Provides
 
 @Module
-class ActivityModule(private val activity: AppCompatActivity) {
+class ActivityModule(private val activity: BaseActivity<*>) {
+
 
     @ActivityContext
     @Provides
