@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 import org.jetbrains.annotations.NotNull
 
 
-@Entity(tableName = "dummy_entity")
+@Entity(tableName = "news_entity")
 data class NewsDao(
     @PrimaryKey(autoGenerate = true)
     @NotNull
