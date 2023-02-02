@@ -15,7 +15,7 @@ import org.json.JSONObject
 import javax.inject.Inject
 
 
-class CountriesSelectionActivity : BaseActivity<CountrySelectionViewModel>(), CountrySelectionAdapter.CountrySelectionListner {
+class CountriesSelectionActivity : BaseActivity<CountrySelectionViewModel>() {
 
     @Inject
     lateinit var adapter: CountrySelectionAdapter
@@ -27,6 +27,13 @@ class CountriesSelectionActivity : BaseActivity<CountrySelectionViewModel>(), Co
         binding = NewsLanguageSelectionBinding.inflate(layoutInflater)
         setContentView(binding.root)
         loadFromJSONFile()
+        initViews()
+    }
+
+    private fun initViews() {
+        adapter.itemClickListener = {
+            startActivity(CountryDetailsActivity.getStartIntent(this, it))
+        }
     }
 
     fun loadFromJSONFile() {
@@ -44,7 +51,7 @@ class CountriesSelectionActivity : BaseActivity<CountrySelectionViewModel>(), Co
                     countryData[AppConstants.NAME] = name
                     countryList.add(countryData)
                 }
-                val contactAdapter = CountrySelectionAdapter(countryList, this)
+                val contactAdapter = CountrySelectionAdapter(countryList)
                 binding.recyclerView.setLayoutManager(LinearLayoutManager(this))
                 binding.recyclerView.setAdapter(contactAdapter)
                 binding.progressBar.visibility = View.GONE
@@ -58,10 +65,10 @@ class CountriesSelectionActivity : BaseActivity<CountrySelectionViewModel>(), Co
         activityComponent.inject(this)
     }
 
-    override fun onCountrySelectionListner(data: String) {
-        startActivity(Intent(this,CountryDetailsActivity::class.java).putExtra(
-            AppConstants.LANGUAGE_CODE_KEY,
-            data
-        ))
-    }
+//    override fun onCountrySelectionListner(data: String) {
+//        startActivity(Intent(this,CountryDetailsActivity::class.java).putExtra(
+//            AppConstants.LANGUAGE_CODE_KEY,
+//            data
+//        ))
+//    }
 }

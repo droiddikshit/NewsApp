@@ -89,7 +89,7 @@ class ActivityModule(private val activity: BaseActivity<*>) {
     fun provideNewsSourceDetailsAdapter() = NewsSourceDetailsAdapter(ArrayList())
 
     @Provides
-    fun provideCountrySelectionAdapter() = CountrySelectionAdapter(ArrayList(), countrySelectionListner = null)
+    fun provideCountrySelectionAdapter() = CountrySelectionAdapter(ArrayList())
 
     @Provides
     fun provideCountryDetailsAdapter() = CountryDetailsAdapter(ArrayList())

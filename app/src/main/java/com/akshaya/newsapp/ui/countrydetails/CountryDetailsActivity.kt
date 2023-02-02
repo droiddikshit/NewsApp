@@ -1,5 +1,7 @@
 package com.akshaya.newsapp.ui.countrydetails
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -19,6 +21,18 @@ import javax.inject.Inject
 
 class CountryDetailsActivity : BaseActivity<CountryDetailsViewModel>() {
 
+    companion object {
+
+        private const val EXTRA_LANGUAGE_ID = "EXTRA_LANGUAGE_ID"
+
+        fun getStartIntent(context: Context, languageId: String) =
+            Intent(context, CountryDetailsActivity::class.java).apply {
+                putExtra(EXTRA_LANGUAGE_ID, languageId)
+            }
+
+    }
+
+
     @Inject
     lateinit var adapter: CountryDetailsAdapter
 
@@ -33,7 +47,14 @@ class CountryDetailsActivity : BaseActivity<CountryDetailsViewModel>() {
         setContentView(binding.root)
         setupUI()
         setupObserver()
-        viewModel.fetchSourceNews(languageCode)
+        getIntentAndFetchSourceNews()
+    }
+
+    private fun getIntentAndFetchSourceNews() {
+        val languageCode = intent.getStringExtra(EXTRA_LANGUAGE_ID)
+        languageCode?.let {
+            viewModel.fetchSourceNews(it)
+        }
     }
 
     private fun setupUI() {
