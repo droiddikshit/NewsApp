@@ -16,4 +16,8 @@ annotation class BaseUrl
 
 @Qualifier
 @Retention(AnnotationRetention.SOURCE)
+annotation class ApiKey
+
+@Qualifier
+@Retention(AnnotationRetention.SOURCE)
 annotation class DatabaseName
