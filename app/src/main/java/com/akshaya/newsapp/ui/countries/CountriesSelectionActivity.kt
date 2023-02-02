@@ -1,17 +1,20 @@
 package com.akshaya.newsapp.ui.countries
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.akshaya.newsapp.data.model.Country
 import com.akshaya.newsapp.databinding.NewsLanguageSelectionBinding
 import com.akshaya.newsapp.di.component.ActivityComponent
 import com.akshaya.newsapp.ui.base.BaseActivity
 import com.akshaya.newsapp.ui.countrydetails.CountryDetailsActivity
-import com.akshaya.newsapp.utils.AppConstants
-import com.akshaya.newsapp.utils.ReadJsonHelper.loadJSONFromAssets
-import org.json.JSONArray
-import org.json.JSONObject
+import com.akshaya.newsapp.utils.Status
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -26,6 +29,10 @@ class CountriesSelectionActivity : BaseActivity<CountrySelectionViewModel>() {
         super.onCreate(savedInstanceState)
         binding = NewsLanguageSelectionBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setupUI()
+        setupObserver()
+        viewModel.fetchCountries()
+
         initViews()
     }
 
@@ -34,31 +41,56 @@ class CountriesSelectionActivity : BaseActivity<CountrySelectionViewModel>() {
             startActivity(CountryDetailsActivity.getStartIntent(this, it))
         }
     }
+    private fun setupUI() {
+        val recyclerView = binding.recyclerView
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.addItemDecoration(
+            DividerItemDecoration(
+                recyclerView.context,
+                (recyclerView.layoutManager as LinearLayoutManager).orientation
+            )
+        )
+        recyclerView.adapter = adapter
+    }
 
-    fun loadFromJSONFile() {
-        try {
-            val obj = JSONObject(loadJSONFromAssets(this))
-            val status: String = obj.getString(AppConstants.STATUS)
-            if (status == AppConstants.SUCCESS) {
-                val contactArray: JSONArray = obj.getJSONArray("data")
-                val countryList: ArrayList<HashMap<String?, String?>> = ArrayList()
-                var countryData: HashMap<String?, String?>
-                for (i in 0 until contactArray.length()) {
-                    val contacts = contactArray.getJSONObject(i)
-                    val name = contacts.getString(AppConstants.NAME)
-                    countryData = HashMap()
-                    countryData[AppConstants.NAME] = name
-                    countryList.add(countryData)
+    private fun setupObserver() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.sourceDetailsList.collect {
+                    when (it.status) {
+                        Status.SUCCESS -> {
+                            binding.progressBar.visibility = View.GONE
+                            it.data?.let { countryList ->
+                                renderList(countryList) }
+                            binding.recyclerView.visibility = View.VISIBLE
+                        }
+                        Status.LOADING -> {
+                            binding.progressBar.visibility = View.VISIBLE
+                            binding.recyclerView.visibility = View.GONE
+                        }
+                        Status.ERROR -> {
+                            //Handle Error
+                            binding.progressBar.visibility = View.GONE
+                            Toast.makeText(
+                                this@CountriesSelectionActivity,
+                                it.message,
+                                Toast.LENGTH_LONG
+                            )
+                                .show()
+                        }
+                    }
                 }
-                val contactAdapter = CountrySelectionAdapter(countryList)
-                binding.recyclerView.setLayoutManager(LinearLayoutManager(this))
-                binding.recyclerView.setAdapter(contactAdapter)
-                binding.progressBar.visibility = View.GONE
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
         }
     }
+
+    private fun renderList(countryList: List<Country>) {
+        adapter.addData(countryList)
+        adapter.notifyDataSetChanged()
+
+    }
+
+
 
     override fun injectDependencies(activityComponent: ActivityComponent) {
         activityComponent.inject(this)
