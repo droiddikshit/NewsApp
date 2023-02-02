@@ -26,7 +26,6 @@ class CountriesSelectionActivity : BaseActivity<CountrySelectionViewModel>() {
         super.onCreate(savedInstanceState)
         binding = NewsLanguageSelectionBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        loadFromJSONFile()
         initViews()
     }
 
@@ -64,11 +63,4 @@ class CountriesSelectionActivity : BaseActivity<CountrySelectionViewModel>() {
     override fun injectDependencies(activityComponent: ActivityComponent) {
         activityComponent.inject(this)
     }
-
-//    override fun onCountrySelectionListner(data: String) {
-//        startActivity(Intent(this,CountryDetailsActivity::class.java).putExtra(
-//            AppConstants.LANGUAGE_CODE_KEY,
-//            data
-//        ))
-//    }
 }

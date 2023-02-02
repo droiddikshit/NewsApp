@@ -1,7 +1,9 @@
 package com.akshaya.newsapp.data.repository
 
 import com.akshaya.newsapp.data.api.NetworkService
+import com.akshaya.newsapp.data.local.json.JsonService
 import com.akshaya.newsapp.data.model.Article
+import com.akshaya.newsapp.data.model.Country
 import com.akshaya.newsapp.data.model.NewsSources
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -10,7 +12,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class TopHeadlineRepository @Inject constructor(private val networkService: NetworkService) {
+class TopHeadlineRepository @Inject constructor(private val networkService: NetworkService,private val jsonService: JsonService) {
 
     fun getTopHeadlines(country: String): Flow<List<Article>> {
         return flow {
@@ -41,6 +43,12 @@ class TopHeadlineRepository @Inject constructor(private val networkService: Netw
             emit(networkService.getTopHeadlines(sourceId))
         }.map {
             it.articles
+        }
+    }
+
+    fun getCountries(): Flow<List<Country>> {
+        return flow {
+            emit(jsonService.getCountries())
         }
     }
 
