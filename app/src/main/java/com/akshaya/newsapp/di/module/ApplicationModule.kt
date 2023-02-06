@@ -6,8 +6,7 @@ import com.akshaya.newsapp.BuildConfig
 import com.akshaya.newsapp.NewsApplication
 import com.akshaya.newsapp.data.api.ApiKeyInterceptor
 import com.akshaya.newsapp.data.api.NetworkService
-import com.akshaya.newsapp.data.local.db.DatabaseService
-import com.akshaya.newsapp.data.remote.Networking
+import com.akshaya.newsapp.data.local.AppDataBase
 import com.akshaya.newsapp.di.ApiKey
 import com.akshaya.newsapp.di.ApplicationContext
 import com.akshaya.newsapp.di.BaseUrl
@@ -70,9 +69,9 @@ class ApplicationModule(private val application: NewsApplication) {
     fun provideDatabase(
         @ApplicationContext context: Context,
         @DatabaseName name: String
-    ): DatabaseService = Room.databaseBuilder(
+    ): AppDataBase = Room.databaseBuilder(
         context,
-        DatabaseService::class.java,
+        AppDataBase::class.java,
         name
     ).build()
 }

@@ -1,16 +1,20 @@
 package com.akshaya.newsapp.data.local.db.dao
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import org.jetbrains.annotations.NotNull
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.Query
+import com.akshaya.newsapp.data.local.entity.ArticleEntity
+import kotlinx.coroutines.flow.Flow
 
+@Dao
+interface NewsDao {
+    @Query("SELECT * FROM ArticleEntity")
+    fun getAllTopHeadline(): Flow<List<ArticleEntity>>
 
-@Entity(tableName = "news_entity")
-data class NewsDao(
-    @PrimaryKey(autoGenerate = true)
-    @NotNull
-    val id: Long, @ColumnInfo(name = "name")
-    @NotNull
-    val name: String
-)
+    @Insert
+    fun insertAll(topHeadline: List<ArticleEntity>)
+
+    @Query("Delete from ArticleEntity")
+    fun deleteAll(): Int
+
+}

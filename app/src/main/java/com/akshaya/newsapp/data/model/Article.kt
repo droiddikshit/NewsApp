@@ -1,5 +1,6 @@
 package com.akshaya.newsapp.data.model
 
+import com.akshaya.newsapp.data.local.entity.ArticleEntity
 import com.google.gson.annotations.SerializedName
 
 data class Article(
@@ -13,4 +14,13 @@ data class Article(
     val imageUrl: String = "",
     @SerializedName("source")
     val source: Source
+)
+
+fun Article.toArticle(): ArticleEntity = ArticleEntity(
+    title = this.title,
+    description = this.description,
+    url = this.url,
+    imageUrl = this.imageUrl,
+    sourceId = this.source.id,
+    sourceName = this.source.name
 )

@@ -8,7 +8,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.akshaya.newsapp.data.model.Article
+import com.akshaya.newsapp.data.local.entity.ArticleEntity
 import com.akshaya.newsapp.databinding.ActivityTopHeadlineBinding
 import com.akshaya.newsapp.di.component.ActivityComponent
 import com.akshaya.newsapp.ui.base.BaseActivity
@@ -69,7 +69,7 @@ class TopHeadlineActivity: BaseActivity<TopHeadlineViewModel>() {
         }
     }
 
-    private fun renderList(articleList: List<Article>) {
+    private fun renderList(articleList: List<ArticleEntity>) {
         adapter.addData(articleList)
         adapter.notifyDataSetChanged()
     }
