@@ -3,6 +3,7 @@ package com.akshaya.newsapp.di.module
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.akshaya.newsapp.data.api.NetworkStatusHelper
 import com.akshaya.newsapp.data.repository.TopHeadlineRepository
 import com.akshaya.newsapp.di.ActivityContext
 import com.akshaya.newsapp.ui.base.BaseActivity
@@ -16,6 +17,8 @@ import com.akshaya.newsapp.ui.newssource.NewsSourceAdapter
 import com.akshaya.newsapp.ui.newssource.NewsSourceViewModel
 import com.akshaya.newsapp.ui.newssource.sourcedetails.NewsSourceDetailsAdapter
 import com.akshaya.newsapp.ui.newssource.sourcedetails.NewsSourceDetailsViewModel
+import com.akshaya.newsapp.ui.searchnews.SearchAdapter
+import com.akshaya.newsapp.ui.searchnews.SearchViewModel
 import com.akshaya.newsapp.ui.topheadlines.TopHeadlineAdapter
 import com.akshaya.newsapp.ui.topheadlines.TopHeadlineViewModel
 import dagger.Module
@@ -32,10 +35,12 @@ class ActivityModule(private val activity: BaseActivity<*>) {
     }
 
     @Provides
-    fun provideNewsListViewModel(topHeadlineRepository: TopHeadlineRepository): TopHeadlineViewModel {
+    fun provideNewsListViewModel(
+        topHeadlineRepository: TopHeadlineRepository, networkStatusHelper: NetworkStatusHelper,
+    ): TopHeadlineViewModel {
         return ViewModelProvider(activity,
             ViewModelProviderFactory(TopHeadlineViewModel::class) {
-                TopHeadlineViewModel(topHeadlineRepository)
+                TopHeadlineViewModel(topHeadlineRepository,networkStatusHelper)
             })[TopHeadlineViewModel::class.java]
     }
 
@@ -80,6 +85,14 @@ class ActivityModule(private val activity: BaseActivity<*>) {
     }
 
     @Provides
+    fun provideSearchViewModel(topHeadlineRepository: TopHeadlineRepository): SearchViewModel {
+        return ViewModelProvider(activity,
+            ViewModelProviderFactory(SearchViewModel::class) {
+                SearchViewModel(topHeadlineRepository)
+            })[SearchViewModel::class.java]
+    }
+
+    @Provides
     fun provideTopHeadlineAdapter() = TopHeadlineAdapter(ArrayList())
 
     @Provides
@@ -89,9 +102,12 @@ class ActivityModule(private val activity: BaseActivity<*>) {
     fun provideNewsSourceDetailsAdapter() = NewsSourceDetailsAdapter(ArrayList())
 
     @Provides
-    fun provideCountrySelectionAdapter() = CountrySelectionAdapter(ArrayList(), countrySelectionListner = null)
+    fun provideCountrySelectionAdapter() = CountrySelectionAdapter(ArrayList())
 
     @Provides
     fun provideCountryDetailsAdapter() = CountryDetailsAdapter(ArrayList())
+
+    @Provides
+    fun provideSearchAdapter() = SearchAdapter(ArrayList())
 
 }

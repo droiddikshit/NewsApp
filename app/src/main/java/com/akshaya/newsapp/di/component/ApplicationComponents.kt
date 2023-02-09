@@ -3,6 +3,8 @@ package com.akshaya.newsapp.di.component
 import android.content.Context
 import com.akshaya.newsapp.NewsApplication
 import com.akshaya.newsapp.data.api.NetworkService
+import com.akshaya.newsapp.data.api.NetworkStatusHelper
+import com.akshaya.newsapp.data.local.DatabaseHelperImpl
 import com.akshaya.newsapp.data.repository.TopHeadlineRepository
 import com.akshaya.newsapp.di.ApplicationContext
 import com.akshaya.newsapp.di.module.ApplicationModule
@@ -22,5 +24,7 @@ interface ApplicationComponent {
 
     fun getTopHeadlineRepository(): TopHeadlineRepository
 
+    fun getDbHelper(): DatabaseHelperImpl
 
+    fun getNetworkStatusHelper(): NetworkStatusHelper
 }

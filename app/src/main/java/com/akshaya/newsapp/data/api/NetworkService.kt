@@ -1,8 +1,6 @@
 package com.akshaya.newsapp.data.api
 
-import com.akshaya.newsapp.data.model.NewsSources
-import com.akshaya.newsapp.data.model.SourceDetailsResponse
-import com.akshaya.newsapp.data.model.TopHeadlinesResponse
+import com.akshaya.newsapp.data.model.*
 import retrofit2.http.GET
 import retrofit2.http.Query
 import javax.inject.Singleton
@@ -23,5 +21,8 @@ interface NetworkService {
     suspend fun getNewsSourceData(
         @Query("sources") sourceId: String
     ): SourceDetailsResponse
+
+    @GET("everything")
+    suspend fun getSearchNews(@Query("q") search: String): SearchResponse
 
 }
