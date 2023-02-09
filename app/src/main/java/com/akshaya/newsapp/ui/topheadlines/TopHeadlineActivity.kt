@@ -28,6 +28,7 @@ class TopHeadlineActivity: BaseActivity<TopHeadlineViewModel>() {
         binding = ActivityTopHeadlineBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupUI()
+        viewModel.fetchNews()
         setupObserver()
     }
 

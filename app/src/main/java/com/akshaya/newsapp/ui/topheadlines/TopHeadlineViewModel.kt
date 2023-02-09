@@ -24,22 +24,21 @@ class TopHeadlineViewModel(private val topHeadlineRepository: TopHeadlineReposit
 
     val articleList: StateFlow<Resource<List<ArticleEntity>>> = _articleList
 
-    init {
-        fetchNews()
-    }
-
-    private fun fetchNews() {
-        viewModelScope.launch(Dispatchers.Main) {
-            topHeadlineRepository.getTopHeadlines(COUNTRY)
-                .flowOn(Dispatchers.IO)
-
-                .catch { e ->
-                    _articleList.value = Resource.error(e.toString())
-                }
-                .collect {
-                    _articleList.value = Resource.success(it)
-                }
+    fun fetchNews() {
+        if (networkStatusHelper.isNetworkConnected()) {
+            viewModelScope.launch(Dispatchers.Main) {
+                topHeadlineRepository.getTopHeadlines(COUNTRY)
+                    .flowOn(Dispatchers.IO)
+                    .catch { e ->
+                        _articleList.value = Resource.error(e.toString())
+                    }
+                    .collect {
+                        _articleList.value = Resource.success(it)
+                    }
+            }
+        } else {
+            //will add db call here
+            _articleList.value = Resource.error("Connectivity issues")
         }
     }
-
 }
