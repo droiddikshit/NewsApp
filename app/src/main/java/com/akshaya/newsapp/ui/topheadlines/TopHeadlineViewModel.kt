@@ -2,6 +2,7 @@ package com.akshaya.newsapp.ui.topheadlines
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.akshaya.newsapp.data.api.NetworkStatusHelper
 import com.akshaya.newsapp.data.local.entity.ArticleEntity
 import com.akshaya.newsapp.data.model.Article
 import com.akshaya.newsapp.data.repository.TopHeadlineRepository
@@ -16,7 +17,8 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 
 
-class TopHeadlineViewModel(private val topHeadlineRepository: TopHeadlineRepository) : BaseViewModel() {
+class TopHeadlineViewModel(private val topHeadlineRepository: TopHeadlineRepository, private val networkStatusHelper: NetworkStatusHelper,
+) : BaseViewModel() {
 
     private val _articleList = MutableStateFlow<Resource<List<ArticleEntity>>>(Resource.loading())
 

@@ -3,6 +3,7 @@ package com.akshaya.newsapp.di.module
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.akshaya.newsapp.data.api.NetworkStatusHelper
 import com.akshaya.newsapp.data.repository.TopHeadlineRepository
 import com.akshaya.newsapp.di.ActivityContext
 import com.akshaya.newsapp.ui.base.BaseActivity
@@ -32,10 +33,12 @@ class ActivityModule(private val activity: BaseActivity<*>) {
     }
 
     @Provides
-    fun provideNewsListViewModel(topHeadlineRepository: TopHeadlineRepository): TopHeadlineViewModel {
+    fun provideNewsListViewModel(
+        topHeadlineRepository: TopHeadlineRepository, networkStatusHelper: NetworkStatusHelper,
+    ): TopHeadlineViewModel {
         return ViewModelProvider(activity,
             ViewModelProviderFactory(TopHeadlineViewModel::class) {
-                TopHeadlineViewModel(topHeadlineRepository)
+                TopHeadlineViewModel(topHeadlineRepository,networkStatusHelper)
             })[TopHeadlineViewModel::class.java]
     }
 

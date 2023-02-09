@@ -3,10 +3,12 @@ package com.akshaya.newsapp.data.api
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.os.Build
-import androidx.annotation.RequiresApi
+import com.akshaya.newsapp.di.ApplicationContext
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class NetworkStatusHelper(val context: Context) {
+@Singleton
+class NetworkStatusHelper @Inject constructor(@ApplicationContext val context: Context) {
     fun isNetworkConnected(): Boolean {
         val connectivityManager =
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
