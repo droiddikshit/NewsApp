@@ -7,6 +7,7 @@ import com.akshaya.newsapp.di.component.ActivityComponent
 import com.akshaya.newsapp.ui.base.BaseActivity
 import com.akshaya.newsapp.ui.countries.CountriesSelectionActivity
 import com.akshaya.newsapp.ui.newssource.NewsSourceActivity
+import com.akshaya.newsapp.ui.searchnews.SearchActivity
 import com.akshaya.newsapp.ui.topheadlines.TopHeadlineActivity
 
 class HomeScreenActivity : BaseActivity<HomeScreenViewModel>() {
@@ -44,6 +45,10 @@ class HomeScreenActivity : BaseActivity<HomeScreenViewModel>() {
                     CountriesSelectionActivity::class.java
                 )
             )
+        }
+
+        binding.search.setOnClickListener {
+            startActivity(SearchActivity.getStartSearchIntent(this))
         }
     }
 

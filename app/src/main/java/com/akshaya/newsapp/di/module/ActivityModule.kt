@@ -17,6 +17,8 @@ import com.akshaya.newsapp.ui.newssource.NewsSourceAdapter
 import com.akshaya.newsapp.ui.newssource.NewsSourceViewModel
 import com.akshaya.newsapp.ui.newssource.sourcedetails.NewsSourceDetailsAdapter
 import com.akshaya.newsapp.ui.newssource.sourcedetails.NewsSourceDetailsViewModel
+import com.akshaya.newsapp.ui.searchnews.SearchAdapter
+import com.akshaya.newsapp.ui.searchnews.SearchViewModel
 import com.akshaya.newsapp.ui.topheadlines.TopHeadlineAdapter
 import com.akshaya.newsapp.ui.topheadlines.TopHeadlineViewModel
 import dagger.Module
@@ -83,6 +85,14 @@ class ActivityModule(private val activity: BaseActivity<*>) {
     }
 
     @Provides
+    fun provideSearchViewModel(topHeadlineRepository: TopHeadlineRepository): SearchViewModel {
+        return ViewModelProvider(activity,
+            ViewModelProviderFactory(SearchViewModel::class) {
+                SearchViewModel(topHeadlineRepository)
+            })[SearchViewModel::class.java]
+    }
+
+    @Provides
     fun provideTopHeadlineAdapter() = TopHeadlineAdapter(ArrayList())
 
     @Provides
@@ -96,5 +106,8 @@ class ActivityModule(private val activity: BaseActivity<*>) {
 
     @Provides
     fun provideCountryDetailsAdapter() = CountryDetailsAdapter(ArrayList())
+
+    @Provides
+    fun provideSearchAdapter() = SearchAdapter(ArrayList())
 
 }
